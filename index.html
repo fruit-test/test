@@ -57,58 +57,7 @@
         <div class="container">
             <h2>What Our Customers Say</h2>
             <div class="testimonials-grid" id="testimonialsGrid">
-                <!-- Default testimonials -->
-                <div class="testimonial-card">
-                    <div class="customer-avatar">
-                        <img src="images/customers/karen-jks.jpg" alt="Karen" onerror="this.parentElement.innerHTML='👩‍🦰'">
-                    </div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p>"I absolutely love JK's Fruit Soda! As the founder, I'm so proud of what we've created. Every sip is pure refreshment!"</p>
-                    <h4>Karen (JK's Founder)</h4>
-                    <span>Trusted Customer • Founder</span>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="customer-avatar">
-                        <img src="images/customers/leonora-jks.jpg" alt="Leonora" onerror="this.parentElement.innerHTML='👩‍🦱'">
-                    </div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p>"JK's Fruit Soda is amazing! The natural taste is incredible. I love sharing it with my family and friends. Highly recommended!"</p>
-                    <h4>Leonora</h4>
-                    <span>Trusted Customer • Family Favorite</span>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="customer-avatar">👩‍🦰</div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p>"JK's Fruit Soda changed my life! The strawberry is so natural and refreshing. I buy it every week!"</p>
-                    <h4>Sarah Johnson</h4>
-                    <span>Verified Customer • Miami, USA</span>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="customer-avatar">👨‍💼</div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p>"The Blueberry flavor with Nata de Coco is incredible! Best soda I've ever tasted. Beats all the brands!"</p>
-                    <h4>David Chen</h4>
-                    <span>Verified Customer • Singapore</span>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="customer-avatar">👩‍🎤</div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p>"Lychee soda is my guilty pleasure! So unique and delicious. I recommend it to all my friends!"</p>
-                    <h4>Emma Rodriguez</h4>
-                    <span>Verified Customer • Barcelona, Spain</span>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="customer-avatar">👨‍🍳</div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p>"As a chef, I appreciate quality ingredients. JK's Fruit Soda is pure refreshment. 10/10!"</p>
-                    <h4>Marco Rossi</h4>
-                    <span>Verified Customer • Italy</span>
-                </div>
+                <!-- Customer testimonials loaded dynamically -->
             </div>
         </div>
     </section>
@@ -281,30 +230,74 @@
             `).join('');
         }
 
-        // Load and display customers
+        // Load and display customers from admin uploads
         function loadCustomers() {
             const customers = JSON.parse(localStorage.getItem('jks_customers') || '[]');
             const testimonialsGrid = document.getElementById('testimonialsGrid');
 
-            // Keep default testimonials and add customer ones
-            if (customers.length > 0) {
-                const customerHTML = customers.map(customer => {
-                    const stars = '⭐'.repeat(customer.rating) + '☆'.repeat(5 - customer.rating);
-                    return `
-                        <div class="testimonial-card">
-                            <div class="customer-avatar">
-                                ${customer.photo ? `<img src="${customer.photo}" alt="${customer.name}">` : '👤'}
-                            </div>
-                            <div class="stars">${stars}</div>
-                            <p>"${customer.testimonial}"</p>
-                            <h4>${customer.name}</h4>
-                            <span>${customer.status}</span>
-                        </div>
-                    `;
-                }).join('');
-                
-                testimonialsGrid.innerHTML += customerHTML;
+            if (customers.length === 0) {
+                // Show default testimonials if no customers added
+                testimonialsGrid.innerHTML = `
+                    <div class="testimonial-card">
+                        <div class="customer-avatar">👩‍🦰</div>
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"JK's Fruit Soda is amazing! The natural taste is incredible. I love sharing it with my family and friends. Highly recommended!"</p>
+                        <h4>Leonora</h4>
+                        <span>Trusted Customer • Family Favorite</span>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="customer-avatar">👩‍🦰</div>
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"JK's Fruit Soda changed my life! The strawberry is so natural and refreshing. I buy it every week!"</p>
+                        <h4>Sarah Johnson</h4>
+                        <span>Verified Customer • Miami, USA</span>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="customer-avatar">👨‍💼</div>
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"The Blueberry flavor with Nata de Coco is incredible! Best soda I've ever tasted. Beats all the brands!"</p>
+                        <h4>David Chen</h4>
+                        <span>Verified Customer • Singapore</span>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="customer-avatar">👩‍🎤</div>
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"Lychee soda is my guilty pleasure! So unique and delicious. I recommend it to all my friends!"</p>
+                        <h4>Emma Rodriguez</h4>
+                        <span>Verified Customer • Barcelona, Spain</span>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="customer-avatar">👨‍🍳</div>
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"As a chef, I appreciate quality ingredients. JK's Fruit Soda is pure refreshment. 10/10!"</p>
+                        <h4>Marco Rossi</h4>
+                        <span>Verified Customer • Italy</span>
+                    </div>
+                `;
+                return;
             }
+
+            // Display uploaded customer testimonials with photos from admin
+            const customerHTML = customers.map(customer => {
+                const stars = '⭐'.repeat(customer.rating) + '☆'.repeat(5 - customer.rating);
+                return `
+                    <div class="testimonial-card">
+                        <div class="customer-avatar">
+                            ${customer.photo ? `<img src="${customer.photo}" alt="${customer.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` : '👤'}
+                        </div>
+                        <div class="stars">${stars}</div>
+                        <p>"${customer.testimonial}"</p>
+                        <h4>${customer.name}</h4>
+                        <span>${customer.status}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            testimonialsGrid.innerHTML = customerHTML;
         }
 
         // Handle contact form submission
@@ -365,7 +358,7 @@
             }
         });
 
-        console.log('🍓 Website loaded - Messages will save to admin panel');
+        console.log('🍓 Website loaded - Customer photos from admin panel will display here');
     </script>
 </body>
 </html>
