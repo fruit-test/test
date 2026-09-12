@@ -4,123 +4,671 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - JK's Fruit Soda</title>
-    <link rel="stylesheet" href="admin-styles.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
         .admin-locked {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex; justify-content: center; align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 9999;
         }
-        .admin-locked.hidden { display: none; }
-        .locked-message {
-            background: white; padding: 3rem; border-radius: 15px;
-            text-align: center; max-width: 500px;
+
+        .admin-locked.hidden {
+            display: none;
         }
+
         .password-modal {
-            background: white; padding: 2rem; border-radius: 15px;
-            text-align: center; max-width: 400px;
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
-        /* STAR RATING FIX */
+        .password-modal h2 {
+            color: #0066ff;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .password-modal p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-modal input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+
+        .password-modal input:focus {
+            outline: none;
+            border-color: #0066ff;
+            box-shadow: 0 0 5px rgba(0, 102, 255, 0.3);
+        }
+
+        .password-modal button {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #0066ff, #0052cc);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .password-modal button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.3);
+        }
+
+        .error-msg {
+            color: #c41e3a;
+            display: none;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #0066ff, #0052cc);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: white;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .tab-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .tab-btn.active {
+            color: #0066ff;
+            border-bottom-color: #0066ff;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .section-card h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #0066ff;
+            box-shadow: 0 0 5px rgba(0, 102, 255, 0.3);
+        }
+
         .star-rating-group {
             display: flex;
             gap: 10px;
             margin: 1rem 0;
         }
+
         .star-rating-group input {
             display: none;
         }
+
         .star-rating-group label {
             font-size: 2.5rem;
             cursor: pointer;
             color: #ddd;
             transition: color 0.2s ease;
         }
+
         .star-rating-group input:checked ~ label,
         .star-rating-group label:hover,
         .star-rating-group label:hover ~ label {
             color: #ffc107;
         }
 
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%; padding: 0.75rem; border: 2px solid #ddd;
-            border-radius: 8px; font-size: 1rem; font-family: inherit;
-            box-sizing: border-box;
-        }
-
         .btn-submit {
             background: linear-gradient(135deg, #0066ff, #0052cc);
-            color: white; border: none; padding: 0.75rem 2rem;
-            border-radius: 8px; font-weight: bold; cursor: pointer;
-            transition: all 0.3s ease; width: 100%;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
         }
 
-        .section-card {
-            background: white; padding: 2rem; border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.3);
+        }
+
+        .btn-delete {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover {
+            background: #cc5555;
+        }
+
+        .testimonial-card {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-left: 4px solid #0066ff;
+        }
+
+        .testimonial-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        .message-card {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #0066ff;
+        }
+
+        .message-card strong {
+            color: #0066ff;
+            font-size: 1.1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            color: #999;
+        }
+
+        .flavor-item {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #0066ff;
+        }
+
+        .flavor-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .flavor-actions button {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .oz-section {
+            background: #e8f4ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #0066ff;
+        }
+
+        .oz-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .password-section {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #ffc107;
+        }
+
+        .password-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .password-group input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .password-group button {
+            background: #ffc107;
+            color: #333;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .password-group button:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        .error-alert {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .tabs {
+                flex-direction: column;
+            }
+            .admin-header h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Password Lock Modal -->
+    <!-- Password Lock -->
     <div id="passwordLock" class="admin-locked">
         <div class="password-modal">
             <h2>🔐 Admin Access</h2>
-            <p>Enter password</p>
-            <input type="password" id="adminPassword" placeholder="Enter password">
+            <p>Enter password to access admin panel</p>
+            <input type="password" id="adminPassword" placeholder="Enter password" autocomplete="off">
             <button onclick="checkAdminPassword()">Access Admin</button>
+            <div class="error-msg" id="errorMsg">❌ Wrong password!</div>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                <a href="index.html" style="color: #0066ff; text-decoration: none;">← Back to Website</a>
+            </p>
         </div>
     </div>
 
     <!-- Admin Dashboard -->
-    <div class="admin-container" id="adminContent" style="display: none;">
-        <h1>🍓 JK's Admin Panel</h1>
+    <div id="adminContent" style="display: none;">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>🍓 JK's Fruit Soda Admin Panel</h1>
+                <a href="index.html">← Back to Website</a>
+            </div>
 
-        <!-- Upload Photos Tab -->
-        <div class="section-card">
-            <h2>📸 Add Customer Photo</h2>
-            <form id="uploadForm">
-                <div class="form-group">
-                    <label>Customer Name:</label>
-                    <input type="text" id="customerName" required>
+            <!-- Tabs Navigation -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab(event, 'photos')">📸 Photos</button>
+                <button class="tab-btn" onclick="switchTab(event, 'customers')">👥 Customers</button>
+                <button class="tab-btn" onclick="switchTab(event, 'messages')">📬 Messages</button>
+                <button class="tab-btn" onclick="switchTab(event, 'website')">✏️ Website</button>
+                <button class="tab-btn" onclick="switchTab(event, 'security')">🔐 Security</button>
+            </div>
+
+            <!-- TAB 1: PHOTOS -->
+            <div id="photos" class="tab-content active">
+                <div class="section-card">
+                    <h2>📸 Add Customer Photo</h2>
+                    <form id="uploadForm">
+                        <div class="form-group">
+                            <label>Customer Name:</label>
+                            <input type="text" id="customerName" placeholder="e.g., Karen" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Upload Photo:</label>
+                            <input type="file" id="customerPhoto" accept="image/*" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Star Rating:</label>
+                            <div class="star-rating-group">
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1">⭐</label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2">⭐</label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3">⭐</label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4">⭐</label>
+                                <input type="radio" id="star5" name="rating" value="5" checked>
+                                <label for="star5">⭐</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Testimonial:</label>
+                            <textarea id="customerTestimonial" rows="4" placeholder="What they say about JK's Fruit Soda" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select id="customerStatus" required>
+                                <option value="Trusted Customer">Trusted Customer</option>
+                                <option value="Founder">Founder</option>
+                                <option value="Family Favorite">Family Favorite</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-submit">✅ Upload & Add Customer</button>
+                    </form>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Photo:</label>
-                    <input type="file" id="customerPhoto" accept="image/*" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Star Rating:</label>
-                    <div class="star-rating-group">
-                        <input type="radio" id="star1" name="rating" value="1">
-                        <label for="star1">⭐</label>
-                        <input type="radio" id="star2" name="rating" value="2">
-                        <label for="star2">⭐</label>
-                        <input type="radio" id="star3" name="rating" value="3">
-                        <label for="star3">⭐</label>
-                        <input type="radio" id="star4" name="rating" value="4">
-                        <label for="star4">⭐</label>
-                        <input type="radio" id="star5" name="rating" value="5" checked>
-                        <label for="star5">⭐</label>
+            <!-- TAB 2: CUSTOMERS -->
+            <div id="customers" class="tab-content">
+                <div class="section-card">
+                    <h2>👥 Your Customers</h2>
+                    <div id="customersList">
+                        <div class="empty-state">No customers yet</div>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Testimonial:</label>
-                    <textarea id="customerTestimonial" rows="4" required></textarea>
+            <!-- TAB 3: MESSAGES -->
+            <div id="messages" class="tab-content">
+                <div class="section-card">
+                    <h2>📬 Messages</h2>
+                    <button class="btn-submit" onclick="exportMessages()" style="margin-bottom: 1rem;">📥 Export Messages</button>
+                    <div id="messagesList">
+                        <div class="empty-state">No messages yet</div>
+                    </div>
                 </div>
+            </div>
 
-                <button type="submit" class="btn-submit">✅ Upload Customer</button>
-            </form>
-        </div>
+            <!-- TAB 4: WEBSITE -->
+            <div id="website" class="tab-content">
+                <div class="section-card">
+                    <h2>✏️ Website Settings</h2>
 
-        <!-- Messages Section -->
-        <div class="section-card" style="margin-top: 2rem;">
-            <h2>📬 Messages</h2>
-            <div id="messagesList"></div>
+                    <h3 style="margin-top: 2rem; color: #0066ff;">🏢 Business Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Business Name:</label>
+                            <input type="text" id="businessName" placeholder="JK's Fruit Soda">
+                        </div>
+                        <div class="form-group">
+                            <label>Slogan:</label>
+                            <input type="text" id="slogan" placeholder="Premium Fruit Sodas">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Address:</label>
+                            <input type="text" id="address" placeholder="Your address">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone:</label>
+                            <input type="text" id="phone" placeholder="+63 (XXX) XXX-XXXX">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" id="email" placeholder="info@jksfruitsoda.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Business Hours:</label>
+                            <input type="text" id="hours" placeholder="Mon - Sun: 10 AM - 8 PM">
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 2rem; color: #0066ff;">🎨 Hero Section</h3>
+                    <div class="form-group">
+                        <label>Hero Title:</label>
+                        <input type="text" id="heroTitle" placeholder="Refresh Your Life!">
+                    </div>
+                    <div class="form-group">
+                        <label>Hero Subtitle:</label>
+                        <input type="text" id="heroSubtitle" placeholder="Premium Fruit Sodas - Handcrafted with Love">
+                    </div>
+                    <div class="form-group">
+                        <label>CTA Button Text:</label>
+                        <input type="text" id="ctaButton" placeholder="Explore Flavors">
+                    </div>
+
+                    <h3 style="margin-top: 2rem; color: #0066ff;">💰 Pricing & Sizes</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Medium Price:</label>
+                            <input type="number" id="mediumPrice" step="0.01" placeholder="29">
+                        </div>
+                        <div class="form-group">
+                            <label>Large Price:</label>
+                            <input type="number" id="largePrice" step="0.01" placeholder="39">
+                        </div>
+                    </div>
+
+                    <div class="oz-section">
+                        <h4>📏 Product Sizes (OZ)</h4>
+                        <div class="oz-grid">
+                            <div class="form-group">
+                                <label>Medium OZ:</label>
+                                <input type="number" id="mediumOz" placeholder="12">
+                            </div>
+                            <div class="form-group">
+                                <label>Large OZ:</label>
+                                <input type="number" id="largeOz" placeholder="16">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Add-on Price:</label>
+                            <input type="number" id="addOnPrice" step="0.01" placeholder="5">
+                        </div>
+                        <div class="form-group">
+                            <label>Add-on Description:</label>
+                            <input type="text" id="addOnDescription" placeholder="Makes every sip even more delightful!">
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 2rem; color: #0066ff;">📱 Social Media Links</h3>
+                    <div class="form-group">
+                        <label>Facebook URL:</label>
+                        <input type="url" id="facebookUrl" placeholder="https://facebook.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label>Instagram URL:</label>
+                        <input type="url" id="instagramUrl" placeholder="https://instagram.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label>TikTok URL:</label>
+                        <input type="url" id="tiktokUrl" placeholder="https://tiktok.com/...">
+                    </div>
+
+                    <h3 style="margin-top: 2rem; color: #0066ff;">📝 About Us</h3>
+                    <div class="form-group">
+                        <label>About Description:</label>
+                        <textarea id="aboutText" rows="4" placeholder="About your business..."></textarea>
+                    </div>
+
+                    <h3 style="margin-top: 2rem; color: #0066ff;">🍓 Manage Flavors</h3>
+                    <div class="form-group">
+                        <label>Flavor Icon (emoji):</label>
+                        <input type="text" id="flavorIcon" placeholder="🍓">
+                    </div>
+                    <div class="form-group">
+                        <label>Flavor Name:</label>
+                        <input type="text" id="flavorName" placeholder="Strawberry">
+                    </div>
+                    <div class="form-group">
+                        <label>Flavor Description:</label>
+                        <textarea id="flavorDescription" rows="3" placeholder="Sweet and refreshing..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Flavor Tag:</label>
+                        <input type="text" id="flavorTag" placeholder="Fresh & Sweet">
+                    </div>
+                    <button type="button" class="btn-submit" onclick="addFlavor()" style="margin-bottom: 1rem;">➕ Add Flavor</button>
+
+                    <div id="flavorsList">
+                        <h4 style="margin-top: 2rem;">Current Flavors:</h4>
+                    </div>
+
+                    <button type="button" class="btn-submit" onclick="saveAllSettings()" style="margin-top: 2rem;">💾 Save All Changes</button>
+                </div>
+            </div>
+
+            <!-- TAB 5: SECURITY -->
+            <div id="security" class="tab-content">
+                <div class="section-card">
+                    <h2>🔐 Security Settings</h2>
+                    <div class="password-section">
+                        <h3>Change Admin Password</h3>
+                        <div class="password-group">
+                            <input type="password" id="newPassword" placeholder="New Password" required>
+                            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                            <button type="button" onclick="changePassword()">Update Password</button>
+                        </div>
+                        <div id="passwordChangeMsg"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -132,19 +680,42 @@
             if (password === ADMIN_PASSWORD) {
                 document.getElementById('passwordLock').style.display = 'none';
                 document.getElementById('adminContent').style.display = 'block';
+                loadAllData();
             } else {
-                alert('❌ Wrong password!');
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('adminPassword').value = '';
             }
         }
 
-        // PHOTO UPLOAD HANDLER
+        function switchTab(event, tabName) {
+            event.preventDefault();
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const adminPasswordInput = document.getElementById('adminPassword');
+            adminPasswordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkAdminPassword();
+            });
+        });
+
+        // PHOTO UPLOAD
         document.getElementById('uploadForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const name = document.getElementById('customerName').value;
-            const photo = document.getElementById('customerPhoto').files[0];
+            const photoFile = document.getElementById('customerPhoto').files[0];
             const rating = document.querySelector('input[name="rating"]:checked').value;
             const testimonial = document.getElementById('customerTestimonial').value;
+            const status = document.getElementById('customerStatus').value;
+
+            if (!photoFile) {
+                alert('Please select a photo!');
+                return;
+            }
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -152,46 +723,236 @@
                     name: name,
                     photo: e.target.result,
                     rating: parseInt(rating),
-                    testimonial: testimonial
+                    testimonial: testimonial,
+                    status: status,
+                    timestamp: new Date().toLocaleString()
                 };
 
                 let customers = JSON.parse(localStorage.getItem('jks_customers') || '[]');
                 customers.push(customer);
                 localStorage.setItem('jks_customers', JSON.stringify(customers));
 
-                alert('✅ Customer added!');
+                alert('✅ Customer added successfully!');
                 document.getElementById('uploadForm').reset();
+                document.getElementById('star5').checked = true;
+                loadCustomersAdmin();
             };
-            reader.readAsDataURL(photo);
+            reader.readAsDataURL(photoFile);
         });
+
+        function loadCustomersAdmin() {
+            const customers = JSON.parse(localStorage.getItem('jks_customers') || '[]');
+            const customersList = document.getElementById('customersList');
+
+            if (customers.length === 0) {
+                customersList.innerHTML = '<div class="empty-state">No customers yet</div>';
+                return;
+            }
+
+            customersList.innerHTML = customers.map((customer, index) => {
+                const stars = '⭐'.repeat(customer.rating) + '☆'.repeat(5 - customer.rating);
+                return `
+                    <div class="testimonial-card">
+                        <img src="${customer.photo}" alt="${customer.name}">
+                        <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">${stars}</div>
+                        <p>"${customer.testimonial}"</p>
+                        <h4>${customer.name}</h4>
+                        <small>${customer.status}</small>
+                        <button class="btn-delete" onclick="deleteCustomer(${index})" style="margin-top: 1rem; width: 100%;">🗑️ Delete</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteCustomer(index) {
+            if (confirm('Delete this customer?')) {
+                let customers = JSON.parse(localStorage.getItem('jks_customers') || '[]');
+                customers.splice(index, 1);
+                localStorage.setItem('jks_customers', JSON.stringify(customers));
+                loadCustomersAdmin();
+            }
+        }
 
         function loadMessages() {
             const messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
             const messagesList = document.getElementById('messagesList');
 
             if (messages.length === 0) {
-                messagesList.innerHTML = '<p>No messages</p>';
+                messagesList.innerHTML = '<div class="empty-state">No messages yet</div>';
                 return;
             }
 
             messagesList.innerHTML = messages.map((msg, index) => `
-                <div style="background: #f9f9f9; padding: 1rem; margin: 1rem 0; border-radius: 8px;">
-                    <strong>${msg.name}</strong><br>
+                <div class="message-card">
+                    <strong>👤 ${msg.name}</strong><br>
                     📧 ${msg.email}<br>
-                    ${msg.message}
-                    <button onclick="deleteMsg(${index})" style="background: #ff6b6b; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; margin-top: 1rem;">🗑️ Delete</button>
+                    📱 ${msg.phone || 'Not provided'}<br><br>
+                    💬 ${msg.message}<br><br>
+                    <small style="color: #999;">⏰ ${msg.timestamp}</small>
+                    <button class="btn-delete" onclick="deleteMessage(${index})" style="margin-top: 1rem; width: 100%;">🗑️ Delete</button>
                 </div>
             `).join('');
         }
 
-        function deleteMsg(index) {
-            let messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
-            messages.splice(index, 1);
-            localStorage.setItem('jks_contact_messages', JSON.stringify(messages));
-            loadMessages();
+        function deleteMessage(index) {
+            if (confirm('Delete this message?')) {
+                let messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
+                messages.splice(index, 1);
+                localStorage.setItem('jks_contact_messages', JSON.stringify(messages));
+                loadMessages();
+            }
         }
 
-        loadMessages();
+        function exportMessages() {
+            const messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
+            const dataStr = JSON.stringify(messages, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `jks-messages-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        function loadWebsiteData() {
+            document.getElementById('businessName').value = localStorage.getItem('jks_business_name') || 'JK\'s Fruit Soda';
+            document.getElementById('slogan').value = localStorage.getItem('jks_slogan') || 'Premium Fruit Sodas';
+            document.getElementById('address').value = localStorage.getItem('jks_business_address') || '';
+            document.getElementById('phone').value = localStorage.getItem('jks_business_phone') || '';
+            document.getElementById('email').value = localStorage.getItem('jks_business_email') || '';
+            document.getElementById('hours').value = localStorage.getItem('jks_business_hours') || 'Mon - Sun: 10 AM - 8 PM';
+            document.getElementById('heroTitle').value = localStorage.getItem('jks_hero_title') || 'Refresh Your Life!';
+            document.getElementById('heroSubtitle').value = localStorage.getItem('jks_hero_subtitle') || 'Premium Fruit Sodas - Handcrafted with Love';
+            document.getElementById('ctaButton').value = localStorage.getItem('jks_cta_button') || 'Explore Flavors';
+            document.getElementById('mediumPrice').value = localStorage.getItem('jks_medium_price') || '29';
+            document.getElementById('largePrice').value = localStorage.getItem('jks_large_price') || '39';
+            document.getElementById('mediumOz').value = localStorage.getItem('jks_medium_oz') || '12';
+            document.getElementById('largeOz').value = localStorage.getItem('jks_large_oz') || '16';
+            document.getElementById('addOnPrice').value = localStorage.getItem('jks_addon_price') || '5';
+            document.getElementById('addOnDescription').value = localStorage.getItem('jks_addon_description') || 'Makes every sip even more delightful!';
+            document.getElementById('facebookUrl').value = localStorage.getItem('jks_facebook_url') || '';
+            document.getElementById('instagramUrl').value = localStorage.getItem('jks_instagram_url') || '';
+            document.getElementById('tiktokUrl').value = localStorage.getItem('jks_tiktok_url') || '';
+            document.getElementById('aboutText').value = localStorage.getItem('jks_about_text') || '';
+            loadFlavorsList();
+        }
+
+        function loadFlavorsList() {
+            const flavors = JSON.parse(localStorage.getItem('jks_flavors') || '[]');
+            const flavorsList = document.getElementById('flavorsList');
+            
+            if (flavors.length === 0) {
+                flavorsList.innerHTML = '<h4 style="margin-top: 2rem;">Current Flavors: None</h4>';
+                return;
+            }
+
+            flavorsList.innerHTML = '<h4 style="margin-top: 2rem;">Current Flavors:</h4>' + flavors.map((flavor, index) => `
+                <div class="flavor-item">
+                    <strong>${flavor.icon} ${flavor.name}</strong><br>
+                    ${flavor.description}<br>
+                    <small>Tag: ${flavor.tag}</small>
+                    <button type="button" class="btn-delete" onclick="deleteFlavor(${index})" style="margin-top: 1rem; width: 100%;">🗑️ Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function addFlavor() {
+            const icon = document.getElementById('flavorIcon').value;
+            const name = document.getElementById('flavorName').value;
+            const description = document.getElementById('flavorDescription').value;
+            const tag = document.getElementById('flavorTag').value;
+
+            if (!icon || !name || !description || !tag) {
+                alert('Please fill all flavor fields!');
+                return;
+            }
+
+            const flavor = { icon, name, description, tag };
+            let flavors = JSON.parse(localStorage.getItem('jks_flavors') || '[]');
+            flavors.push(flavor);
+            localStorage.setItem('jks_flavors', JSON.stringify(flavors));
+
+            alert('✅ Flavor added!');
+            document.getElementById('flavorIcon').value = '';
+            document.getElementById('flavorName').value = '';
+            document.getElementById('flavorDescription').value = '';
+            document.getElementById('flavorTag').value = '';
+            loadFlavorsList();
+        }
+
+        function deleteFlavor(index) {
+            if (confirm('Delete this flavor?')) {
+                let flavors = JSON.parse(localStorage.getItem('jks_flavors') || '[]');
+                flavors.splice(index, 1);
+                localStorage.setItem('jks_flavors', JSON.stringify(flavors));
+                loadFlavorsList();
+            }
+        }
+
+        function saveAllSettings() {
+            localStorage.setItem('jks_business_name', document.getElementById('businessName').value);
+            localStorage.setItem('jks_slogan', document.getElementById('slogan').value);
+            localStorage.setItem('jks_business_address', document.getElementById('address').value);
+            localStorage.setItem('jks_business_phone', document.getElementById('phone').value);
+            localStorage.setItem('jks_business_email', document.getElementById('email').value);
+            localStorage.setItem('jks_business_hours', document.getElementById('hours').value);
+            localStorage.setItem('jks_hero_title', document.getElementById('heroTitle').value);
+            localStorage.setItem('jks_hero_subtitle', document.getElementById('heroSubtitle').value);
+            localStorage.setItem('jks_cta_button', document.getElementById('ctaButton').value);
+            localStorage.setItem('jks_medium_price', document.getElementById('mediumPrice').value);
+            localStorage.setItem('jks_large_price', document.getElementById('largePrice').value);
+            localStorage.setItem('jks_medium_oz', document.getElementById('mediumOz').value);
+            localStorage.setItem('jks_large_oz', document.getElementById('largeOz').value);
+            localStorage.setItem('jks_addon_price', document.getElementById('addOnPrice').value);
+            localStorage.setItem('jks_addon_description', document.getElementById('addOnDescription').value);
+            localStorage.setItem('jks_facebook_url', document.getElementById('facebookUrl').value);
+            localStorage.setItem('jks_instagram_url', document.getElementById('instagramUrl').value);
+            localStorage.setItem('jks_tiktok_url', document.getElementById('tiktokUrl').value);
+            localStorage.setItem('jks_about_text', document.getElementById('aboutText').value);
+
+            alert('✅ All settings saved!');
+        }
+
+        function changePassword() {
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+            const msg = document.getElementById('passwordChangeMsg');
+
+            if (!newPass || !confirmPass) {
+                msg.className = 'error-alert';
+                msg.textContent = '❌ Please fill all fields';
+                msg.style.display = 'block';
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                msg.className = 'error-alert';
+                msg.textContent = '❌ Passwords do not match';
+                msg.style.display = 'block';
+                return;
+            }
+
+            if (newPass.length < 6) {
+                msg.className = 'error-alert';
+                msg.textContent = '❌ Password must be at least 6 characters';
+                msg.style.display = 'block';
+                return;
+            }
+
+            ADMIN_PASSWORD = newPass;
+            localStorage.setItem('jks_admin_password', newPass);
+            msg.className = 'success-msg';
+            msg.textContent = '✅ Password updated successfully!';
+            msg.style.display = 'block';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        function loadAllData() {
+            loadWebsiteData();
+            loadCustomersAdmin();
+            loadMessages();
+        }
     </script>
 </body>
 </html>
