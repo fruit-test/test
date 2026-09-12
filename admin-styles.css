@@ -1,0 +1,319 @@
+/* Admin Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #0066ff;
+    --secondary: #ff1744;
+    --accent: #ffd700;
+    --dark: #1a1a1a;
+    --light: #f5f5f5;
+    --white: #ffffff;
+    --success: #4CAF50;
+    --warning: #FFA500;
+    --error: #FF6B6B;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Admin Navigation */
+.admin-navbar {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: var(--white);
+    padding: 1rem 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.admin-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.admin-navbar .admin-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.admin-nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.admin-nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    transition: opacity 0.3s;
+    font-size: 0.95rem;
+}
+
+.admin-nav-links a:hover {
+    opacity: 0.8;
+}
+
+/* Admin Header */
+.admin-header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+    color: var(--dark);
+}
+
+.admin-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.admin-header p {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* Admin Sections */
+.admin-section {
+    margin: 2rem 0;
+}
+
+.section-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border-top: 5px solid var(--primary);
+}
+
+.section-card h2 {
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--light);
+    padding-bottom: 1rem;
+}
+
+.section-card h3 {
+    color: var(--secondary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+}
+
+/* Upload Form */
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: var(--dark);
+    font-size: 1rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group textarea,
+.form-group select {
+    padding: 0.75rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 5px rgba(0, 102, 255, 0.2);
+}
+
+.form-group small {
+    color: #999;
+    font-size: 0.85rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Buttons */
+.btn-submit {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: var(--white);
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 102, 255, 0.3);
+}
+
+.btn-secondary {
+    background: var(--accent);
+    color: var(--dark);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    transition: transform 0.3s;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+}
+
+.btn-delete {
+    background: var(--error);
+    color: var(--white);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.btn-delete:hover {
+    background: #e55555;
+}
+
+/* Customers List */
+.customers-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.customer-card {
+    background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(255, 23, 68, 0.1));
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.customer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.customer-avatar-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    object-fit: cover;
+    border: 3px solid var(--primary);
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+}
+
+.customer-card h3 {
+    margin-top: 0;
+    color: var(--primary);
+}
+
+.customer-card .status {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--dark);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.customer-card .testimonial {
+    font-style: italic;
+    color: #555;
+    margin: 1rem 0;
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+.customer-card .btn-delete {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #999;
+    font-size: 1.1rem;
+}
+
+/* Help Content */
+.help-content {
+    line-height: 1.8;
+    color: #555;
+}
+
+.help-content ol,
+.help-content ul {
+    margin-left: 1.5rem;
+    margin-top: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.help-content li {
+    margin-bottom: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .admin-nav-links {
+        gap: 1rem;
+        font-size: 0.85rem;
+    }
+
+    .section-card {
+        padding: 1.5rem;
+    }
+
+    .customers-list {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - JK's Fruit Soda</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <style>
+        .admin-locked {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .admin-locked.hidden {
+            display: none;
+        }
+
+        .locked-message {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .locked-message h1 {
+            color: #c41e3a;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .locked-message p {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .password-modal {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .password-modal h2 {
+            color: var(--primary, #0066ff);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .password-modal p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-modal input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .password-modal input:focus {
+            outline: none;
+            border-color: var(--primary, #0066ff);
+            box-shadow: 0 0 5px rgba(0, 102, 255, 0.3);
+        }
+
+        .password-modal button {
+            background: linear-gradient(135deg, var(--primary, #0066ff), var(--secondary, #ff6b6b));
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .password-modal button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.3);
+        }
+
+        .error-msg {
+            color: #c41e3a;
+            display: none;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        .admin-content-section {
+            margin-top: 3rem;
+            border-top: 2px solid #eee;
+            padding-top: 2rem;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #ffc107;
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+
+        .password-section {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #ffc107;
+        }
+
+        .password-section h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+
+        .password-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .password-group input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .password-group button {
+            background: #ffc107;
+            color: #333;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .password-group button:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        #passwordChangeMsg {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        #passwordChangeMsg.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        #passwordChangeMsg.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .flavor-item {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #0066ff;
+        }
+
+        .flavor-item input {
+            margin-bottom: 0.5rem;
+        }
+
+        .flavor-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .flavor-actions button {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-delete-flavor {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-delete-flavor:hover {
+            background: #cc5555;
+        }
+
+        .flavors-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #0066ff;
+            color: white;
+            border-color: #0066ff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Message styles */
+        .message-card {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #0066ff;
+            transition: all 0.3s ease;
+        }
+
+        .message-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-card.unread {
+            background: #e7f3ff;
+            border-left-color: #ff6b6b;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .message-sender {
+            font-weight: bold;
+            color: #0066ff;
+            font-size: 1.1rem;
+        }
+
+        .message-time {
+            color: #999;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .message-contact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .contact-detail {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .contact-detail strong {
+            color: #333;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .message-text {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .message-text strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-delete-message {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-delete-message:hover {
+            background: #cc5555;
+        }
+
+        .btn-export-messages {
+            background: #0066ff;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-bottom: 2rem;
+        }
+
+        .btn-export-messages:hover {
+            background: #0052cc;
+            transform: translateY(-2px);
+        }
+
+        .empty-messages {
+            text-align: center;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            color: #999;
+        }
+
+        .message-count {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+        }
+
+        /* OZ Sizes section */
+        .oz-section {
+            background: #e8f4ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #0066ff;
+        }
+
+        .oz-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .oz-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #0066ff;
+            box-shadow: 0 0 5px rgba(0, 102, 255, 0.3);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #0066ff, #0052cc);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.3);
+        }
+
+        .section-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-section {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Lock Modal -->
+    <div id="passwordLock" class="admin-locked">
+        <div class="password-modal">
+            <h2>🔐 Admin Access</h2>
+            <p>Enter password to access admin panel</p>
+            <input 
+                type="password" 
+                id="adminPassword" 
+                placeholder="Enter password"
+                autocomplete="off"
+            >
+            <button onclick="checkAdminPassword()">Access Admin</button>
+            <div class="error-msg" id="errorMsg">❌ OFF LIMITS - Wrong password!</div>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                <a href="index.html" style="color: var(--primary); text-decoration: none;">← Back to Website</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Admin Navigation -->
+    <nav class="admin-navbar" id="adminNav" style="display: none;">
+        <div class="admin-container">
+            <div class="admin-logo">🍓 JK's Admin Panel</div>
+            <ul class="admin-nav-links">
+                <li><a href="index.html">← Back to Website</a></li>
+                <li><a href="#upload">Photos</a></li>
+                <li><a href="#customers">Customers</a></li>
+                <li><a href="#messages">Messages</a></li>
+                <li><a href="#website">Edit Site</a></li>
+                <li><a href="#help">Help</a></li>
+                <li><a href="#" onclick="logoutAdmin()">🔒 Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-container" id="adminContent" style="display: none;">
+        <div class="admin-header">
+            <h1>🍓 JK's Fruit Soda Admin Panel</h1>
+            <p>Manage everything about your website</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('upload')">📸 Photos</button>
+            <button class="tab-btn" onclick="switchTab('customers')">👥 Customers</button>
+            <button class="tab-btn" onclick="switchTab('messages')">📬 Messages <span class="message-count" id="messageCount"></span></button>
+            <button class="tab-btn" onclick="switchTab('website')">✏️ Website</button>
+            <button class="tab-btn" onclick="switchTab('help')">❓ Help</button>
+        </div>
+
+        <!-- Upload Photos Tab -->
+        <div id="upload" class="tab-content active">
+            <section class="admin-section">
+                <div class="section-card">
+                    <h2>📸 Add New Customer Photo</h2>
+                    <form id="uploadForm" class="upload-form">
+                        <div class="form-group">
+                            <label for="customerName">Customer Name:</label>
+                            <input type="text" id="customerName" placeholder="e.g., Karen" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerPhoto">Upload Photo (JPG/PNG):</label>
+                            <input type="file" id="customerPhoto" accept="image/jpeg,image/png" required>
+                            <small>Max file size: 5MB</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Star Rating:</label>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5" required>
+                                <label for="star5">⭐</label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4">⭐</label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3">⭐</label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2">⭐</label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1">⭐</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerTestimonial">Testimonial:</label>
+                            <textarea id="customerTestimonial" rows="4" placeholder="What does the customer say about JK's Fruit Soda?" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerStatus">Status:</label>
+                            <select id="customerStatus" required>
+                                <option value="Trusted Customer">Trusted Customer</option>
+                                <option value="Founder">Founder</option>
+                                <option value="Family Favorite">Family Favorite</option>
+                                <option value="Verified Customer">Verified Customer</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-submit">Upload & Add Customer</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <!-- Customers Tab -->
+        <div id="customers" class="tab-content">
+            <section class="admin-section">
+                <div class="section-card">
+                    <h2>👥 Your Customers</h2>
+                    <div id="customersList" class="customers-list">
+                        <div class="empty-state">
+                            <p>🎯 No customers added yet. Upload one above to get started!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Messages Tab -->
+        <div id="messages" class="tab-content">
+            <section class="admin-section">
+                <div class="section-card">
+                    <h2>📬 Customer Messages</h2>
+                    <button class="btn-export-messages" onclick="exportMessages()">📥 Export Messages</button>
+                    <div id="messagesList">
+                        <div class="empty-messages">
+                            <p>📭 No messages yet. Customers can send you messages from the Contact section!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Website Tab -->
+        <div id="website" class="tab-content">
+            <section class="admin-section admin-content-section">
+                <div class="section-card">
+                    <h2>✏️ Website Content</h2>
+                    
+                    <!-- Business Info -->
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #0066ff;">🏢 Business Information</h3>
+                    <div class="form-group">
+                        <label for="businessName">Business Name:</label>
+                        <input type="text" id="businessName" placeholder="JK's Fruit Soda">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessSlogan">Slogan/Tagline:</label>
+                        <input type="text" id="businessSlogan" placeholder="Refresh Your Day!">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessAddress">Address:</label>
+                        <input type="text" id="businessAddress" placeholder="123 Fruit Street, City, Country">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessPhone">Phone Number:</label>
+                        <input type="tel" id="businessPhone" placeholder="+1 (555) 123-4567">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessEmail">Contact Email:</label>
+                        <input type="email" id="businessEmail" placeholder="contact@jksfruits.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessHours">Business Hours:</label>
+                        <input type="text" id="businessHours" placeholder="Mon - Sun: 10 AM - 8 PM">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aboutText">About Us Description:</label>
+                        <textarea id="aboutText" rows="3" placeholder="Crafting premium fruit sodas..."></textarea>
+                    </div>
+
+                    <!-- Hero Section -->
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #0066ff;">🎨 Hero Section</h3>
+                    <div class="form-group">
+                        <label for="heroTitle">Hero Title:</label>
+                        <input type="text" id="heroTitle" placeholder="Refresh Your Life!">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="heroSubtitle">Hero Subtitle:</label>
+                        <input type="text" id="heroSubtitle" placeholder="Premium Fruit Sodas - Handcrafted with Love">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ctaButtonText">CTA Button Text:</label>
+                        <input type="text" id="ctaButtonText" placeholder="Explore Flavors">
+                    </div>
+
+                    <!-- Pricing -->
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #0066ff;">💰 Pricing & Sizes</h3>
+                    <div class="form-group">
+                        <label for="mediumPrice">Medium Size Price:</label>
+                        <input type="number" id="mediumPrice" placeholder="₱29" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="largePrice">Large Size Price:</label>
+                        <input type="number" id="largePrice" placeholder="₱39" step="0.01">
+                    </div>
+
+                    <!-- OZ Sizes -->
+                    <div class="oz-section">
+                        <h4>📏 Product Sizes (OZ)</h4>
+                        <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Customize your bottle sizes - these will show on the gallery</p>
+                        <div class="oz-grid">
+                            <div class="oz-item">
+                                <label for="mediumOz">Medium Size (oz):</label>
+                                <input type="text" id="mediumOz" placeholder="e.g., 12" required>
+                            </div>
+                            <div class="oz-item">
+                                <label for="largeOz">Large Size (oz):</label>
+                                <input type="text" id="largeOz" placeholder="e.g., 16" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="addOnPrice">Add-On (Nata de Coco) Price:</label>
+                        <input type="number" id="addOnPrice" placeholder="₱5" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="addOnDescription">Add-On Description:</label>
+                        <input type="text" id="addOnDescription" placeholder="Makes every sip even more delightful!">
+                    </div>
+
+                    <!-- Social Media -->
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #0066ff;">📱 Social Media Links</h3>
+                    <div class="form-group">
+                        <label for="facebookLink">Facebook URL:</label>
+                        <input type="text" id="facebookLink" placeholder="https://facebook.com/...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="instagramLink">Instagram URL:</label>
+                        <input type="text" id="instagramLink" placeholder="https://instagram.com/...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tiktokLink">TikTok URL:</label>
+                        <input type="text" id="tiktokLink" placeholder="https://tiktok.com/...">
+                    </div>
+
+                    <!-- Flavors Section -->
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #0066ff;">🍓 Manage Flavors</h3>
+                    <p style="color: #666; margin-bottom: 1rem;">Add, edit, or delete your fruit soda flavors</p>
+                    
+                    <div class="flavor-item">
+                        <h4>➕ Add New Flavor</h4>
+                        <div class="form-group">
+                            <label for="newFlavorIcon">Flavor Icon/Emoji:</label>
+                            <input type="text" id="newFlavorIcon" placeholder="🍏" maxlength="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="newFlavorName">Flavor Name:</label>
+                            <input type="text" id="newFlavorName" placeholder="e.g., Green Apple">
+                        </div>
+                        <div class="form-group">
+                            <label for="newFlavorDescription">Description:</label>
+                            <textarea id="newFlavorDescription" rows="3" placeholder="Describe the flavor..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="newFlavorTag">Flavor Tag:</label>
+                            <input type="text" id="newFlavorTag" placeholder="e.g., Crisp & Tangy">
+                        </div>
+                        <button type="button" class="btn-submit" onclick="addFlavor()">➕ Add Flavor</button>
+                    </div>
+
+                    <h4 style="margin-top: 2rem; margin-bottom: 1rem;">📋 Your Flavors</h4>
+                    <div id="flavorsList" class="flavors-list">
+                        <p style="color: #999;">Loading flavors...</p>
+                    </div>
+
+                    <!-- Save Button -->
+                    <button type="button" class="btn-submit" onclick="saveWebsiteContent()" style="margin-top: 2rem;">💾 Save All Changes</button>
+                    <div id="contentSaveMsg" style="margin-top: 1rem; display: none; padding: 1rem; background: #d4edda; color: #155724; border-radius: 8px;">
+                        ✅ All changes saved! Updates are live immediately.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security Section -->
+            <section class="admin-section admin-content-section">
+                <div class="section-card">
+                    <h2>🔐 Security Settings</h2>
+                    <div class="password-section">
+                        <h3>🔑 Change Admin Password</h3>
+                        <p>Keep your admin panel secure with a strong password.</p>
+                        <div class="password-group">
+                            <input type="password" id="newPassword" placeholder="Enter new password" required>
+                            <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+                            <button type="button" onclick="changeAdminPassword()">Update Password</button>
+                        </div>
+                        <div id="passwordChangeMsg"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Help Tab -->
+        <div id="help" class="tab-content">
+            <section class="admin-section">
+                <div class="section-card">
+                    <h2>❓ How to Use Admin Panel</h2>
+                    <div class="help-content">
+                        <h3>📬 View Customer Messages</h3>
+                        <ol>
+                            <li>Go to the <strong>Messages</strong> tab</li>
+                            <li>View all customer messages from your website's contact form</li>
+                            <li>See sender name, email, phone, and message text</li>
+                            <li>Delete messages after reading</li>
+                            <li>Export messages as JSON backup</li>
+                        </ol>
+
+                        <h3>✏️ Edit Website Content</h3>
+                        <ol>
+                            <li>Go to the <strong>Website</strong> tab</li>
+                            <li>Edit any section (Business Info, Hero, Pricing, etc.)</li>
+                            <li>Manage your flavors - add, edit, or delete</li>
+                            <li>Add social media links</li>
+                            <li>Click "Save All Changes" when done</li>
+                        </ol>
+
+                        <h3>📏 Edit Product Sizes (OZ)</h3>
+                        <ol>
+                            <li>In the Website tab, find the "Pricing & Sizes" section</li>
+                            <li>Scroll to "📏 Product Sizes (OZ)"</li>
+                            <li>Enter your medium size (e.g., 12 for 12 oz)</li>
+                            <li>Enter your large size (e.g., 16 for 16 oz)</li>
+                            <li>Click "Save All Changes"</li>
+                            <li>Your gallery will now show the custom sizes! (e.g., "12 oz & 16 oz Available")</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <script>
+        // Admin password
+        let ADMIN_PASSWORD = localStorage.getItem('jks_admin_password') || 'Jyair03062026!01';
+        const ADMIN_SESSION = 'jks_admin_unlocked';
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Load messages if switching to messages tab
+            if (tabName === 'messages') {
+                loadMessages();
+            }
+        }
+
+        // Check if already unlocked
+        function checkUnlocked() {
+            return sessionStorage.getItem(ADMIN_SESSION) === 'true';
+        }
+
+        // Unlock admin panel
+        function checkAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            const errorMsg = document.getElementById('errorMsg');
+
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem(ADMIN_SESSION, 'true');
+                unlockAdmin();
+            } else {
+                errorMsg.style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        }
+
+        // Unlock and show admin panel
+        function unlockAdmin() {
+            document.getElementById('passwordLock').classList.add('hidden');
+            document.getElementById('adminNav').style.display = 'block';
+            document.getElementById('adminContent').style.display = 'block';
+            loadWebsiteContent();
+            loadFlavors();
+            loadMessages();
+            updateMessageCount();
+        }
+
+        // Load and display messages
+        function loadMessages() {
+            const messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
+            const messagesList = document.getElementById('messagesList');
+
+            if (messages.length === 0) {
+                messagesList.innerHTML = '<div class="empty-messages"><p>📭 No messages yet. Customers can send you messages from the Contact section!</p></div>';
+                return;
+            }
+
+            messagesList.innerHTML = messages.map((msg, index) => {
+                // Generate stars based on rating
+                const rating = msg.rating || 5;
+                const stars = '⭐'.repeat(rating) + '☆'.repeat(5 - rating);
+                
+                return `
+                    <div class="message-card ${msg.read ? '' : 'unread'}">
+                        <div class="message-header">
+                            <span class="message-sender">👤 ${msg.name || 'Anonymous'}</span>
+                            <span class="message-time">⏰ ${msg.timestamp || 'No date'}</span>
+                        </div>
+                        <div class="message-contact">
+                            <div class="contact-detail">
+                                <strong>📧 Email:</strong>
+                                ${msg.email || 'Not provided'}
+                            </div>
+                            <div class="contact-detail">
+                                <strong>📱 Phone:</strong>
+                                ${msg.phone || 'Not provided'}
+                            </div>
+                        </div>
+                        <div class="message-text">
+                            <strong>Message:</strong>
+                            ${msg.message || 'No message'}
+                        </div>
+                        <div class="message-actions">
+                            <button class="btn-delete-message" onclick="deleteMessage(${index})">🗑️ Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Delete a message
+        function deleteMessage(index) {
+            if (!confirm('Delete this message?')) return;
+            
+            let messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
+            messages.splice(index, 1);
+            localStorage.setItem('jks_contact_messages', JSON.stringify(messages));
+            
+            loadMessages();
+            updateMessageCount();
+        }
+
+        // Export messages as JSON
+        function exportMessages() {
+            const messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
+            
+            if (messages.length === 0) {
+                alert('📭 No messages to export!');
+                return;
+            }
+
+            const dataStr = JSON.stringify(messages, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `jks-messages-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Update message count
+        function updateMessageCount() {
+            const messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
+            const countElement = document.getElementById('messageCount');
+            if (messages.length > 0) {
+                countElement.textContent = messages.length;
+                countElement.style.display = 'inline-block';
+            } else {
+                countElement.style.display = 'none';
+            }
+        }
+
+        // Change admin password
+        function changeAdminPassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const msgDiv = document.getElementById('passwordChangeMsg');
+
+            if (!newPassword || !confirmPassword) {
+                msgDiv.textContent = '❌ Please fill in both password fields!';
+                msgDiv.className = 'error';
+                msgDiv.style.display = 'block';
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                msgDiv.textContent = '❌ Passwords do not match!';
+                msgDiv.className = 'error';
+                msgDiv.style.display = 'block';
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                msgDiv.textContent = '❌ Password must be at least 6 characters long!';
+                msgDiv.className = 'error';
+                msgDiv.style.display = 'block';
+                return;
+            }
+
+            localStorage.setItem('jks_admin_password', newPassword);
+            ADMIN_PASSWORD = newPassword;
+
+            msgDiv.textContent = '✅ Password updated successfully! Your new password is now active.';
+            msgDiv.className = 'success';
+            msgDiv.style.display = 'block';
+
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+
+            setTimeout(() => {
+                msgDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Logout
+        function logoutAdmin() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem(ADMIN_SESSION);
+                location.reload();
+            }
+        }
+
+        // Load website content
+        function loadWebsiteContent() {
+            document.getElementById('businessName').value = localStorage.getItem('jks_business_name') || 'JK\'s Fruit Soda';
+            document.getElementById('businessSlogan').value = localStorage.getItem('jks_business_slogan') || 'Refresh Your Day!';
+            document.getElementById('businessEmail').value = localStorage.getItem('jks_business_email') || 'contact@jksfruits.com';
+            document.getElementById('businessPhone').value = localStorage.getItem('jks_business_phone') || '+1 (555) 123-4567';
+            document.getElementById('businessAddress').value = localStorage.getItem('jks_business_address') || '123 Fruit Street, City, Country';
+            document.getElementById('mediumPrice').value = localStorage.getItem('jks_medium_price') || '29';
+            document.getElementById('largePrice').value = localStorage.getItem('jks_large_price') || '39';
+            document.getElementById('mediumOz').value = localStorage.getItem('jks_medium_oz') || '12';
+            document.getElementById('largeOz').value = localStorage.getItem('jks_large_oz') || '16';
+            document.getElementById('addOnPrice').value = localStorage.getItem('jks_addon_price') || '5';
+            document.getElementById('businessHours').value = localStorage.getItem('jks_business_hours') || 'Mon - Sun: 10 AM - 8 PM';
+            document.getElementById('aboutText').value = localStorage.getItem('jks_about_text') || 'Crafting premium fruit sodas with natural flavors and quality ingredients since 2024.';
+            document.getElementById('heroTitle').value = localStorage.getItem('jks_hero_title') || 'Refresh Your Life!';
+            document.getElementById('heroSubtitle').value = localStorage.getItem('jks_hero_subtitle') || 'Premium Fruit Sodas - Handcrafted with Love';
+            document.getElementById('ctaButtonText').value = localStorage.getItem('jks_cta_button') || 'Explore Flavors';
+            document.getElementById('addOnDescription').value = localStorage.getItem('jks_addon_description') || 'Makes every sip even more delightful!';
+            document.getElementById('facebookLink').value = localStorage.getItem('jks_facebook_url') || '';
+            document.getElementById('instagramLink').value = localStorage.getItem('jks_instagram_url') || '';
+            document.getElementById('tiktokLink').value = localStorage.getItem('jks_tiktok_url') || '';
+        }
+
+        // Save website content
+        function saveWebsiteContent() {
+            localStorage.setItem('jks_business_name', document.getElementById('businessName').value);
+            localStorage.setItem('jks_business_slogan', document.getElementById('businessSlogan').value);
+            localStorage.setItem('jks_business_email', document.getElementById('businessEmail').value);
+            localStorage.setItem('jks_business_phone', document.getElementById('businessPhone').value);
+            localStorage.setItem('jks_business_address', document.getElementById('businessAddress').value);
+            localStorage.setItem('jks_medium_price', document.getElementById('mediumPrice').value);
+            localStorage.setItem('jks_large_price', document.getElementById('largePrice').value);
+            localStorage.setItem('jks_medium_oz', document.getElementById('mediumOz').value);
+            localStorage.setItem('jks_large_oz', document.getElementById('largeOz').value);
+            localStorage.setItem('jks_addon_price', document.getElementById('addOnPrice').value);
+            localStorage.setItem('jks_business_hours', document.getElementById('businessHours').value);
+            localStorage.setItem('jks_about_text', document.getElementById('aboutText').value);
+            localStorage.setItem('jks_hero_title', document.getElementById('heroTitle').value);
+            localStorage.setItem('jks_hero_subtitle', document.getElementById('heroSubtitle').value);
+            localStorage.setItem('jks_cta_button', document.getElementById('ctaButtonText').value);
+            localStorage.setItem('jks_addon_description', document.getElementById('addOnDescription').value);
+            localStorage.setItem('jks_facebook_url', document.getElementById('facebookLink').value);
+            localStorage.setItem('jks_instagram_url', document.getElementById('instagramLink').value);
+            localStorage.setItem('jks_tiktok_url', document.getElementById('tiktokLink').value);
+
+            const msg = document.getElementById('contentSaveMsg');
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 3000);
+        }
+
+        // Load flavors
+        function loadFlavors() {
+            const flavors = JSON.parse(localStorage.getItem('jks_flavors') || '[]');
+            const flavorsList = document.getElementById('flavorsList');
+
+            if (flavors.length === 0) {
+                flavorsList.innerHTML = '<p style="color: #999;">No flavors yet. Add one above!</p>';
+                return;
+            }
+
+            flavorsList.innerHTML = flavors.map((flavor, index) => `
+                <div class="flavor-item">
+                    <strong>${flavor.icon} ${flavor.name}</strong>
+                    <p style="color: #666; margin: 0.5rem 0;">${flavor.description}</p>
+                    <small>Tag: ${flavor.tag}</small>
+                    <div class="flavor-actions">
+                        <button class="btn-delete-flavor" onclick="deleteFlavor(${index})">🗑️ Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add flavor
+        function addFlavor() {
+            const icon = document.getElementById('newFlavorIcon').value || '🍓';
+            const name = document.getElementById('newFlavorName').value;
+            const description = document.getElementById('newFlavorDescription').value;
+            const tag = document.getElementById('newFlavorTag').value;
+
+            if (!name || !description || !tag) {
+                alert('❌ Please fill in all flavor fields!');
+                return;
+            }
+
+            const flavors = JSON.parse(localStorage.getItem('jks_flavors') || '[]');
+            flavors.push({ icon, name, description, tag });
+            localStorage.setItem('jks_flavors', JSON.stringify(flavors));
+
+            alert(`✅ Flavor "${name}" added successfully!`);
+            document.getElementById('newFlavorIcon').value = '';
+            document.getElementById('newFlavorName').value = '';
+            document.getElementById('newFlavorDescription').value = '';
+            document.getElementById('newFlavorTag').value = '';
+
+            loadFlavors();
+        }
+
+        // Delete flavor
+        function deleteFlavor(index) {
+            if (!confirm('Delete this flavor?')) return;
+            const flavors = JSON.parse(localStorage.getItem('jks_flavors') || '[]');
+            flavors.splice(index, 1);
+            localStorage.setItem('jks_flavors', JSON.stringify(flavors));
+            loadFlavors();
+        }
+
+        // On page load
+        window.addEventListener('load', function() {
+            if (checkUnlocked()) {
+                unlockAdmin();
+            } else {
+                setTimeout(() => document.getElementById('adminPassword').focus(), 500);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkAdminPassword();
+            });
+        });
+
+        console.log('🔐 Admin panel loaded - Messages showing customer names correctly');
+    </script>
+</body>
+</html>

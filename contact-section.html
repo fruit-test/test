@@ -1,0 +1,77 @@
+<!-- Contact Section -->
+<section id="contact" class="contact">
+    <div class="container">
+        <h2>Get in Touch</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Contact Information</h3>
+                <div class="info-item">
+                    <span class="icon">📍</span>
+                    <p><strong>Location:</strong><br><span id="locationDisplay">Available at select locations</span></p>
+                </div>
+                <div class="info-item">
+                    <span class="icon">📱</span>
+                    <p><strong>Phone:</strong><br><span id="phoneDisplay">+63 (XXX) XXX-XXXX</span></p>
+                </div>
+                <div class="info-item">
+                    <span class="icon">📧</span>
+                    <p><strong>Email:</strong><br><span id="emailDisplay">info@jksfruitsoda.com</span></p>
+                </div>
+                <div class="info-item">
+                    <span class="icon">🕒</span>
+                    <p><strong>Hours:</strong><br><span id="hoursDisplay">Mon - Sun: 10 AM - 8 PM</span></p>
+                </div>
+            </div>
+            <form class="contact-form" id="contactForm">
+                <input type="text" id="senderName" placeholder="Your Name" required>
+                <input type="email" id="senderEmail" placeholder="Your Email" required>
+                <input type="tel" id="senderPhone" placeholder="Your Phone (Optional)">
+                <textarea id="senderMessage" placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+        <div id="successMessage" style="display: none; margin-top: 1rem; padding: 1rem; background: #d4edda; color: #155724; border-radius: 8px; text-align: center;">
+            ✅ Thank you! Your message has been sent. We'll get back to you soon!
+        </div>
+    </div>
+</section>
+
+<script>
+    // Handle contact form submission
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('senderName').value;
+        const email = document.getElementById('senderEmail').value;
+        const phone = document.getElementById('senderPhone').value;
+        const message = document.getElementById('senderMessage').value;
+
+        // Get existing messages
+        let messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
+
+        // Add new message
+        messages.push({
+            id: Date.now(),
+            name: name,
+            email: email,
+            phone: phone,
+            message: message,
+            timestamp: new Date().toLocaleString(),
+            read: false
+        });
+
+        // Save to localStorage
+        localStorage.setItem('jks_contact_messages', JSON.stringify(messages));
+
+        // Show success message
+        document.getElementById('successMessage').style.display = 'block';
+        
+        // Reset form
+        document.getElementById('contactForm').reset();
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+            document.getElementById('successMessage').style.display = 'none';
+        }, 5000);
+    });
+</script>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JK's Fruit Soda - Refreshingly Delicious</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo" id="navLogo">🍓 JK's Fruit Soda</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#flavors">Flavors</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#testimonials">Reviews</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="admin.html" class="admin-link">👑 Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 id="heroTitle">Refresh Your Life!</h1>
+            <p id="heroSubtitle">Premium Fruit Sodas - Handcrafted with Love</p>
+            <button class="cta-btn" id="ctaButton">Explore Flavors</button>
+        </div>
+    </section>
+
+    <!-- Flavors Section -->
+    <section id="flavors" class="flavors">
+        <div class="container">
+            <h2>Our Delicious Flavors</h2>
+            <div class="flavor-grid" id="flavorGrid">
+                <!-- Flavors loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <h2>Our Products</h2>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery items loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonials-grid" id="testimonialsGrid">
+                <!-- Default testimonials -->
+                <div class="testimonial-card">
+                    <div class="customer-avatar">
+                        <img src="images/customers/karen-jks.jpg" alt="Karen" onerror="this.parentElement.innerHTML='👩‍🦰'">
+                    </div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"I absolutely love JK's Fruit Soda! As the founder, I'm so proud of what we've created. Every sip is pure refreshment!"</p>
+                    <h4>Karen (JK's Founder)</h4>
+                    <span>Trusted Customer • Founder</span>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="customer-avatar">
+                        <img src="images/customers/leonora-jks.jpg" alt="Leonora" onerror="this.parentElement.innerHTML='👩‍🦱'">
+                    </div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"JK's Fruit Soda is amazing! The natural taste is incredible. I love sharing it with my family and friends. Highly recommended!"</p>
+                    <h4>Leonora</h4>
+                    <span>Trusted Customer • Family Favorite</span>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="customer-avatar">👩‍🦰</div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"JK's Fruit Soda changed my life! The strawberry is so natural and refreshing. I buy it every week!"</p>
+                    <h4>Sarah Johnson</h4>
+                    <span>Verified Customer • Miami, USA</span>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="customer-avatar">👨‍💼</div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"The Blueberry flavor with Nata de Coco is incredible! Best soda I've ever tasted. Beats all the brands!"</p>
+                    <h4>David Chen</h4>
+                    <span>Verified Customer • Singapore</span>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="customer-avatar">👩‍🎤</div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Lychee soda is my guilty pleasure! So unique and delicious. I recommend it to all my friends!"</p>
+                    <h4>Emma Rodriguez</h4>
+                    <span>Verified Customer • Barcelona, Spain</span>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="customer-avatar">👨‍🍳</div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"As a chef, I appreciate quality ingredients. JK's Fruit Soda is pure refreshment. 10/10!"</p>
+                    <h4>Marco Rossi</h4>
+                    <span>Verified Customer • Italy</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2>Sizes & Pricing</h2>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>Medium</h3>
+                    <p class="size" id="mediumSizeDisplay">12 oz</p>
+                    <p class="price" id="mediumPriceDisplay">₱29.00</p>
+                    <p class="description">Perfect for personal enjoyment</p>
+                </div>
+                <div class="price-card featured">
+                    <div class="badge">Most Popular</div>
+                    <h3>Large</h3>
+                    <p class="size" id="largeSizeDisplay">16 oz</p>
+                    <p class="price" id="largePriceDisplay">₱39.00</p>
+                    <p class="description">Great for sharing or family</p>
+                </div>
+            </div>
+            <div class="addon">
+                <p><strong>✨ Add Chewy Nata de Coco</strong> for only <strong id="addOnPriceDisplay">+₱5.00!</strong> 🥥</p>
+                <p id="addOnDescriptionDisplay" style="font-size: 0.9rem; margin-top: 0.5rem;">Makes every sip even more delightful!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <div class="info-item">
+                        <span class="icon">📍</span>
+                        <p><strong>Location:</strong><br><span id="locationDisplay">Available at select locations</span></p>
+                    </div>
+                    <div class="info-item">
+                        <span class="icon">📱</span>
+                        <p><strong>Phone:</strong><br><span id="phoneDisplay">+63 (XXX) XXX-XXXX</span></p>
+                    </div>
+                    <div class="info-item">
+                        <span class="icon">📧</span>
+                        <p><strong>Email:</strong><br><span id="emailDisplay">info@jksfruitsoda.com</span></p>
+                    </div>
+                    <div class="info-item">
+                        <span class="icon">🕒</span>
+                        <p><strong>Hours:</strong><br><span id="hoursDisplay">Mon - Sun: 10 AM - 8 PM</span></p>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <input type="text" id="senderName" placeholder="Your Name" required>
+                    <input type="email" id="senderEmail" placeholder="Your Email" required>
+                    <input type="tel" id="senderPhone" placeholder="Your Phone (Optional)">
+                    <textarea id="senderMessage" placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+            <div id="successMessage" style="display: none; margin-top: 1rem; padding: 1rem; background: #d4edda; color: #155724; border-radius: 8px; text-align: center; font-weight: bold;">
+                ✅ Thank you! Your message has been sent. We'll get back to you soon!
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About JK's Fruit Soda</h4>
+                    <p id="aboutDisplay">Crafting premium fruit sodas with natural flavors and quality ingredients since 2024.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#flavors">Our Flavors</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="admin.html">Admin Panel</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a id="fbLink" href="#" class="social-icon">📘 Facebook</a>
+                        <a id="igLink" href="#" class="social-icon">📷 Instagram</a>
+                        <a id="ttLink" href="#" class="social-icon">🎵 TikTok</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 JK's Fruit Soda. All rights reserved. 🍓</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load dynamic content from admin panel
+        function loadWebsiteContent() {
+            // Hero Section
+            document.getElementById('heroTitle').textContent = localStorage.getItem('jks_hero_title') || 'Refresh Your Life!';
+            document.getElementById('heroSubtitle').textContent = localStorage.getItem('jks_hero_subtitle') || 'Premium Fruit Sodas - Handcrafted with Love';
+            document.getElementById('ctaButton').textContent = localStorage.getItem('jks_cta_button') || 'Explore Flavors';
+
+            // Navigation logo
+            document.getElementById('navLogo').textContent = '🍓 ' + (localStorage.getItem('jks_business_name') || 'JK\'s Fruit Soda');
+
+            // Pricing
+            const mediumPrice = localStorage.getItem('jks_medium_price') || '29';
+            const largePrice = localStorage.getItem('jks_large_price') || '39';
+            const mediumOz = localStorage.getItem('jks_medium_oz') || '12';
+            const largeOz = localStorage.getItem('jks_large_oz') || '16';
+            
+            document.getElementById('mediumSizeDisplay').textContent = mediumOz + ' oz';
+            document.getElementById('largeSizeDisplay').textContent = largeOz + ' oz';
+            document.getElementById('mediumPriceDisplay').textContent = '₱' + parseFloat(mediumPrice).toFixed(2);
+            document.getElementById('largePriceDisplay').textContent = '₱' + parseFloat(largePrice).toFixed(2);
+
+            // Add-on pricing
+            const addOnPrice = localStorage.getItem('jks_addon_price') || '5';
+            document.getElementById('addOnPriceDisplay').textContent = '+₱' + parseFloat(addOnPrice).toFixed(2) + '!';
+            document.getElementById('addOnDescriptionDisplay').textContent = localStorage.getItem('jks_addon_description') || 'Makes every sip even more delightful!';
+
+            // Contact info
+            document.getElementById('locationDisplay').textContent = localStorage.getItem('jks_business_address') || 'Available at select locations';
+            document.getElementById('phoneDisplay').textContent = localStorage.getItem('jks_business_phone') || '+1 (555) 123-4567';
+            document.getElementById('emailDisplay').textContent = localStorage.getItem('jks_business_email') || 'info@jksfruitsoda.com';
+            document.getElementById('hoursDisplay').textContent = localStorage.getItem('jks_business_hours') || 'Mon - Sun: 10 AM - 8 PM';
+
+            // About section
+            document.getElementById('aboutDisplay').textContent = localStorage.getItem('jks_about_text') || 'Crafting premium fruit sodas with natural flavors and quality ingredients since 2024.';
+
+            // Social media links
+            const fbUrl = localStorage.getItem('jks_facebook_url');
+            const igUrl = localStorage.getItem('jks_instagram_url');
+            const ttUrl = localStorage.getItem('jks_tiktok_url');
+
+            if (fbUrl) document.getElementById('fbLink').href = fbUrl;
+            if (igUrl) document.getElementById('igLink').href = igUrl;
+            if (ttUrl) document.getElementById('ttLink').href = ttUrl;
+
+            // Load flavors
+            loadFlavors();
+
+            // Load customers/testimonials
+            loadCustomers();
+        }
+
+        // Load and display flavors
+        function loadFlavors() {
+            const flavors = JSON.parse(localStorage.getItem('jks_flavors') || '[]');
+            const flavorGrid = document.getElementById('flavorGrid');
+
+            if (flavors.length === 0) {
+                flavorGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">Loading default flavors...</p>';
+                return;
+            }
+
+            flavorGrid.innerHTML = flavors.map(flavor => `
+                <div class="flavor-card">
+                    <div class="flavor-icon">${flavor.icon}</div>
+                    <h3>${flavor.name}</h3>
+                    <p>${flavor.description}</p>
+                    <span class="flavor-tag">${flavor.tag}</span>
+                </div>
+            `).join('');
+        }
+
+        // Load and display customers
+        function loadCustomers() {
+            const customers = JSON.parse(localStorage.getItem('jks_customers') || '[]');
+            const testimonialsGrid = document.getElementById('testimonialsGrid');
+
+            // Keep default testimonials and add customer ones
+            if (customers.length > 0) {
+                const customerHTML = customers.map(customer => {
+                    const stars = '⭐'.repeat(customer.rating) + '☆'.repeat(5 - customer.rating);
+                    return `
+                        <div class="testimonial-card">
+                            <div class="customer-avatar">
+                                ${customer.photo ? `<img src="${customer.photo}" alt="${customer.name}">` : '👤'}
+                            </div>
+                            <div class="stars">${stars}</div>
+                            <p>"${customer.testimonial}"</p>
+                            <h4>${customer.name}</h4>
+                            <span>${customer.status}</span>
+                        </div>
+                    `;
+                }).join('');
+                
+                testimonialsGrid.innerHTML += customerHTML;
+            }
+        }
+
+        // Handle contact form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWebsiteContent();
+
+            // Set up auto-refresh of content every 2 seconds
+            setInterval(loadWebsiteContent, 2000);
+
+            // Contact form handler
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const name = document.getElementById('senderName').value;
+                    const email = document.getElementById('senderEmail').value;
+                    const phone = document.getElementById('senderPhone').value;
+                    const message = document.getElementById('senderMessage').value;
+
+                    // Create message object
+                    const messageData = {
+                        name: name,
+                        email: email,
+                        phone: phone || 'Not provided',
+                        message: message,
+                        timestamp: new Date().toLocaleString(),
+                        read: false
+                    };
+
+                    // Save to localStorage
+                    let messages = JSON.parse(localStorage.getItem('jks_contact_messages') || '[]');
+                    messages.push(messageData);
+                    localStorage.setItem('jks_contact_messages', JSON.stringify(messages));
+
+                    console.log('✅ Message saved:', messageData);
+
+                    // Show success message
+                    const successMsg = document.getElementById('successMessage');
+                    successMsg.style.display = 'block';
+
+                    // Reset form
+                    contactForm.reset();
+
+                    // Hide message after 3 seconds
+                    setTimeout(() => {
+                        successMsg.style.display = 'none';
+                    }, 3000);
+                });
+            }
+
+            // CTA button handler
+            const ctaButton = document.getElementById('ctaButton');
+            if (ctaButton) {
+                ctaButton.addEventListener('click', function() {
+                    document.getElementById('flavors').scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+        });
+
+        console.log('🍓 Website loaded - Messages will save to admin panel');
+    </script>
+</body>
+</html>
